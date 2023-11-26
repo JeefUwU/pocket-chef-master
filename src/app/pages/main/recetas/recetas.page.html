@@ -1,0 +1,24 @@
+<app-header [showMenu]="true" title="Categorias"> </app-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngFor="let category of categories">
+
+    <ion-card class="card shadow">
+      <div class="card-body">
+        <div class="row text-start no-gutters">
+          <div class="col me-2 text-dark mb-1">
+           <h3> {{category["strCategory"]}}</h3>
+          </div>
+
+          <div>
+            <img src="{{category['strCategoryThumb']}}" alt="photo">
+          </div>
+
+        </div>
+      </div>
+    </ion-card>
+    
+  </ng-container>
+
+
+</ion-content>
