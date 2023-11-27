@@ -1,9 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from 'firebase/auth';
 import { Recipe } from 'src/app/modelos/recipes.model';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import { UtilsService } from 'src/app/servicios/utils.service';
 import { AddUpdateRecipesComponent } from 'src/app/shared/components/crud-recipes/add-update-recipes.component';
+
+
 
 @Component({
   selector: 'app-home',
@@ -11,6 +14,12 @@ import { AddUpdateRecipesComponent } from 'src/app/shared/components/crud-recipe
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+
+  sampleArr=[];
+  resultArr=[];
+  constructor(public fs: AngularFirestore){
+
+  }
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
@@ -124,5 +133,31 @@ async deleteRecipe(recipe: Recipe) {
   }).finally(() => {
     loading.dismiss();
   })
+}
+
+search(event) {
+  let searchKey: string = event.target.value;
+  let firstLetter = searchKey.toUpperCase();
+
+  if (searchKey.length == 0) {
+    this.sampleArr = [];
+    this.resultArr = [];
+    return; // No hay necesidad de continuar si la búsqueda es vacía
+  }
+
+  this.resultArr = []; // Limpiar los resultados anteriores
+
+  this.fs.collection('recipes', ref => ref.where('searchIndex', '==', firstLetter)).snapshotChanges()
+    .subscribe(data => {
+      this.sampleArr = []; // Limpiar el array antes de agregar nuevos resultados
+
+      data.forEach(childData => {
+        this.sampleArr.push(childData.payload.doc.data());
+        let name: string = childData.payload.doc.data()['name'];
+        if (name.toUpperCase().startsWith(searchKey.toUpperCase())) {
+          this.resultArr.push(childData.payload.doc.data());
+        }
+      });
+    });
 }
 }

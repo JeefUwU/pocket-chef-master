@@ -1,7 +1,6 @@
 <app-header [showMenu]="true" title="Mis recetas"></app-header>
-
 <ion-content>
-
+<ion-searchbar (ionInput)="search($event)" ></ion-searchbar>
   <ion-list>
     <ion-item-sliding class="product-item" *ngFor="let r of recipes">
       <ion-item>
@@ -21,33 +20,21 @@
     
 <!-- ==============Opciones=============== -->
       <ion-item-options class="option-btn">
-
         <!-- ==============Editar=============== -->
         <ion-item-option color="dark" (click)="addUpdateRecipes(r)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
-  
         <!-- ==============Eliminar=============== -->
         <ion-item-option (click)="confirmDeleteRecipe(r)" color="danger">
           <ion-icon class="option-btn" name="trash-outline" ></ion-icon>
         </ion-item-option>
-
       </ion-item-options>
-
-
-
     </ion-item-sliding>
   </ion-list>
-
   <!-- ======= Nueva receta ========== -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addUpdateRecipes()" color="dark">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-
-
-
-
 </ion-content>
