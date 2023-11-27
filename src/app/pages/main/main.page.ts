@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/modelos/user.model';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import { UtilsService } from 'src/app/servicios/utils.service';
+import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-main',
@@ -39,4 +40,23 @@ export class MainPage implements OnInit {
   signOut() {
     this.firebaseSvc.signOut();
   }
+
+  async compartirContenido() {
+    try {
+      const shareOptions = {
+        title: '¿Has visto la nueva app Pocket-Chef?',
+        text: 'Descarga gratis la nueva app y pruebala',
+        url: 'https//www.pocket.chef.com', // URL opcional
+      };
+  
+      await Share.share(shareOptions);
+  
+      console.log('Contenido compartido con éxito.');
+    } catch (error) {
+      console.error('Error al compartir contenido:', error);
+    }
+  }
 }
+
+
+
